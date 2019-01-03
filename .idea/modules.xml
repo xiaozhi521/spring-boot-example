@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/spring-boot-configruation/spring-boot-configruation.iml" filepath="$PROJECT_DIR$/spring-boot-configruation/spring-boot-configruation.iml" />
       <module fileurl="file://$PROJECT_DIR$/spring-boot-example.iml" filepath="$PROJECT_DIR$/spring-boot-example.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spring-boot-log/spring-boot-log.iml" filepath="$PROJECT_DIR$/spring-boot-log/spring-boot-log.iml" />
     </modules>
   </component>
 </project>
