@@ -9,12 +9,14 @@
         <module name="spring-boot-configruation" />
         <module name="spring-boot-example" />
         <module name="spring-boot-log" />
+        <module name="spring-boot-web" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="spring-boot-configruation" target="1.8" />
       <module name="spring-boot-example" target="1.5" />
       <module name="spring-boot-log" target="1.8" />
+      <module name="spring-boot-web" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
