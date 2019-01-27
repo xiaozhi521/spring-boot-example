@@ -13,7 +13,7 @@ import java.util.Map;
  *           prefix = "person"：配置文件中哪个下面的所有属性进行一一映射
  *  只有这个组件是容器中的组件，才能容器提供的 @ConfigurationProperties 功能
  */
-@PropertySource(value = {"classpath:person.properties"}) //引入指定的文件
+@PropertySource(value = {"classpath:person.properties"},ignoreResourceNotFound = true) //引入指定的文件
 @Component
 @ConfigurationProperties(prefix = "person")
 public class Person {
