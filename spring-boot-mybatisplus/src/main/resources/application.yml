@@ -1,0 +1,47 @@
+server:
+    port: 8080
+logging:
+    level:
+      com:
+        mqf:
+          study : trace
+      org:
+        hibernate:
+          SQL : DEBUG
+    path: /spring/log
+
+#mysql
+---
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/mp?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=UTC
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+#mybatis-plus
+---
+mybatis-plus:
+  mapper-locations:
+    classpath*: com/mqf/study/mapper/*.xml
+  type-aliases-package: com.mqf.study.beans
+
+#redis
+---
+spring:
+  redis:
+    host: 127.0.0.1
+    database: 5
+    port: 6379
+    password: zhonghang
+    timeout: 2000ms
+    jedis:
+      pool:
+        max-active: 200
+        max-idle: 50
+        max-wait: 5000ms
+        min-idle: 10
+
+
+
+
