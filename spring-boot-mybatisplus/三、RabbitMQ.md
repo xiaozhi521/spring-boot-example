@@ -15,11 +15,11 @@
 输入命令：
 
     "D:\Program Files\RabbitMQ Server\rabbitmq_server-3.6.5\sbin\rabbitmq-plugins.bat" enable rabbitmq_management
-        
+
 这样，就安装好插件了，是不是能使用了呢？别急，需要重启服务才行，使用命令：
     
     net stop RabbitMQ && net start RabbitMQ
-  
+
 创建用户，密码，绑定角色
 
 使用rabbitmqctl控制台命令（位于C:\Program Files\RabbitMQ Server\rabbitmq_server-3.6.5\sbin>）来创建用户，密码，绑定权限等。
@@ -31,7 +31,7 @@ rabbitmq的用户管理包括增加用户，删除用户，查看用户列表，
 查看已有用户及用户的角色：
 
     rabbitmqctl.bat list_users
-    
+
 新增一个用户：
 
     rabbitmqctl.bat add_user username password
@@ -73,9 +73,118 @@ rabbitmq用户角色可分为五类：超级管理员, 监控者, 策略制定�
 现在总觉得guest 这个不安全（它的默认密码是guest）,想更改密码，好办：
 
     rabbitmqctl change_password userName newPassword
-    
+
 有的人也许会说，我就是看guest不爽，老子新增了administrator用户了，就是想干掉它，可以：
 
     rabbitmqctl.bat delete_user username
-    
+
 使用浏览器打开 http://localhost:15672 访问Rabbit Mq的管理控制台，使用刚才创建的账号登陆系统：
+
+
+
+
+Docker 中国 镜像加速 ： https://www.docker-cn.com/registry-mirror
+
+
+
+
+###  SpringBoot 整合 RabbitMQ
+#### 1、 引入pom.xml
+   ```xml
+<!-- RabbitMQ-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
+   ```
+#### 2、自动配置
+1) RabbitAutoConfiguration
+
+2) 有自动配置了连接工厂 ConnectionFactory
+
+3) RabbitProperties 封装了 rabbitmq 的配置
+
+    ```xml
+        spring.application.name=spirng-boot-rabbitmq
+        spring.rabbitmq.host=localhost
+        spring.rabbitmq.port=5672
+        spring.rabbitmq.username=guest
+        spring.rabbitmq.password=guest
+    ```
+4) RabbitTemplate 给RabbitMQ 发送和接收消息
+
+     ```java
+        @Autowired
+        private RabbitTemplate rabbitTemplate;
+    
+        @Autowired
+        private UserService userService;
+    
+        /**
+         *  单点，点对点
+         */
+        @Test
+        public void contextLoads() {
+            Map map = new HashMap();
+            map.put("math",100);
+            map.put("name","mqf");
+            map.put("sex","男");
+            rabbitTemplate.convertAndSend("exchange.direct","mqf.news",map);
+        }
+    
+        //接收数据
+        @Test
+        public void receive(){
+            Object object = rabbitTemplate.receiveAndConvert("mqf.news");
+            System.out.println(object.getClass());
+            System.out.println(object);
+        }
+    
+        //广播
+        @Test
+        public void fanout(){
+            rabbitTemplate.convertAndSend("exchange.fanout","",userService.getUserById(1L));
+        }
+     ```
+5) AmqpAdmin : RabbitMQ 系统管理组件,创建和删除 Queue，Exchange，Binding
+
+     ```java
+        @Autowired
+        private AmqpAdmin amqpAdmin;
+    
+        @Test
+        public void createdExchange(){
+            //创建exchange
+    //        amqpAdmin.declareExchange(new DirectExchange("amqpAdmin.exchange"));
+    
+    //        amqpAdmin.declareQueue(new Queue("amqpAdmin.queue",true));
+    
+            amqpAdmin.declareBinding(new Binding("amqpAdmin.queue",Binding.DestinationType.QUEUE,"amqpAdmin.exchange","amqpAdmin",null));
+        }
+     ```
+     
+6) @RabbitListener + @EnableRabbit ：开启监听rabbitmq 内容
+
+
+     ```java
+        @SpringBootApplication
+        @MapperScan("com.mqf.study.mapper")
+        @EnableCaching
+        @EnableRabbit  //开启监听rabbitmq 内容
+        public class SpringBootMybatisplusApplication {}
+     ```
+    ````java
+    @Service
+    public class UserRabbitServiceImpl {
+    
+        @RabbitListener(queues = {"mqf.news"})
+        public void userReceive(User user) {
+            System.out.println("监听 RabbitMQ 发送的消息：" + user);
+        }
+    
+        @RabbitListener(queues = {"mqf"})
+        public void userReceive2(Message message) {
+            System.out.println("监听 RabbitMQ 发送的消息：" + message);
+        }
+    }
+    ````
