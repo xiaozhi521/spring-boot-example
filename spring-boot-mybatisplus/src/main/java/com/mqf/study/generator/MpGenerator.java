@@ -12,6 +12,10 @@ import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 //import org.apache.velocity.context.Context;
 
+/**
+ *  myBatisPlus 代码生成工具类
+ *  @author mqf
+ */
 public class MpGenerator {
     public static void main(String[] args) {
         //1. 全局配置
