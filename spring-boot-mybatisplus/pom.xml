@@ -68,6 +68,7 @@
             <version>2.0.6.RELEASE</version>
         </dependency>
 
+        <!--热部署-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
