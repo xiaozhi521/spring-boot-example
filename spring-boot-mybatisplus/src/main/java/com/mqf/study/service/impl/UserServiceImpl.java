@@ -20,11 +20,11 @@ import java.util.List;
  * @since 2019-02-13
  */
 @Service
-@CacheConfig(cacheNames="emp") //抽取公共配置
+@CacheConfig(cacheNames="user") //抽取公共配置
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
     //不缓存 id 为 1 记录
-//    @Cacheable(value = "emp",keyGenerator = "getKeyGenerator",condition = "#id==1",unless = "#id==2")
+//    @Cacheable(value = "user",keyGenerator = "getKeyGenerator",condition = "#id==1",unless = "#id==2")
 //    @Cacheable(cacheNames = "user",key="#id")
     @Cacheable(/*value = "user", */ key="#id")
     public User getUserById(Long id){
