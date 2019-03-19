@@ -18,6 +18,13 @@ SpringBoot Task
 　[1、创建ScheduledService.java类](#1、创建ScheduledService.java类)
 
 　[2、添加@EnableScheduling，开启定时任务功能](#2、添加@EnableScheduling，开启定时任务功能)
+[三、邮件任务](#三、邮件任务)
+
+　[1、添加maven](#1、添加maven)
+
+　[2、添加properties](#2、添加properties)
+
+　[3、添加测试类](#3、添加测试类)
     
 
 
@@ -129,6 +136,73 @@ public class SpringBootTaskApplication {
         SpringApplication.run(SpringBootTaskApplication.class, args);
     }
 
+}
+```
+
+# 三、邮件任务
+## 1、添加maven
+```xml
+ <!-- mail -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-mail</artifactId>
+</dependency>
+```
+### 几个邮件配置类： 
+  - MailSenderPropertiesConfiguration.java 
+  - MailProperties.java
+
+## 2、添加properties
+```properties
+spring.mail.default-encoding=UTF-8
+spring.mail.host=smtp.163.com
+spring.mail.password=*******
+spring.mail.properties.mail.smtp.ssl.enable=true
+spring.mail.username=*******
+```
+
+## 3、添加测试类
+```java
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class SpringBootTaskApplicationTests {
+
+
+    @Autowired
+    JavaMailSender javaMailSender;
+    @Test
+    public void contextLoads() {
+        SimpleMailMessage message = new SimpleMailMessage();
+        //邮件设置发送者
+        message.setFrom("mu_qing_feng@163.com");
+        //这是主题
+        message.setSubject("施主，我看咱俩有缘！");
+        //设置内容
+        message.setText("<a href='https://www.uc123.com/' value='缘分送到，勿念！'>缘分送到，勿念！</a>");
+        //设置发给谁
+        message.setTo("839257729@qq.com");
+        javaMailSender.send(message);
+    }
+
+    @Test
+    public void contextLoads2() throws Exception{
+        //设置复杂的邮件
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage,true);
+
+        //邮件设置发送者
+        helper.setFrom("mu_qing_feng@163.com");
+        //这是主题
+        helper.setSubject("施主，我看咱俩有缘！");
+        //设置内容
+        helper.setText("<a href='https://www.uc123.com/' value='缘分送到，勿念！'>缘分送到，勿念！</a>");
+        //设置发给谁
+        helper.setTo("1160948933@qq.com");
+
+        //设置文件
+        helper.addAttachment("a.jpg",new File("D:\\图片\\a.jpg"));
+        javaMailSender.send(mimeMessage);
+    }
 }
 ```
 
