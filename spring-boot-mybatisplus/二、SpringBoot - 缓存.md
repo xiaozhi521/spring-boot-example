@@ -38,6 +38,23 @@
 ##### **原理**：
     1、自动配置类：CacheAutoConfiguration
     2、缓存的配置类 @Import(CacheConfigurationImportSelector.class)
+    
+    
+```java
+static class CacheConfigurationImportSelector implements ImportSelector {
+
+        @Override
+        public String[] selectImports(AnnotationMetadata importingClassMetadata) {
+            CacheType[] types = CacheType.values();
+            String[] imports = new String[types.length];
+            for (int i = 0; i < types.length; i++) {
+                imports[i] = CacheConfigurations.getConfigurationClass(types[i]);
+            }
+            return imports;
+        }
+
+    }
+```
         org.springframework.boot.autoconfigure.cache.GenericCacheConfiguration
         org.springframework.boot.autoconfigure.cache.JCacheCacheConfiguration
         org.springframework.boot.autoconfigure.cache.EhCacheCacheConfiguration
@@ -50,6 +67,20 @@
         org.springframework.boot.autoconfigure.cache.NoOpCacheConfiguration
     3、默认配置类：SimpleCacheConfiguration
     4、给容器中注册了一个 CacheManager ： ConcurrentMapCacheManager
+    
+
+```java
+@Bean
+public ConcurrentMapCacheManager cacheManager() {
+    ConcurrentMapCacheManager cacheManager = new ConcurrentMapCacheManager();
+    List<String> cacheNames = this.cacheProperties.getCacheNames();
+    if (!cacheNames.isEmpty()) {
+        cacheManager.setCacheNames(cacheNames);
+    }
+    return this.customizerInvoker.customize(cacheManager);
+}
+```
+    
     5、可以获取和创建 ConcurrentMapCache 类型的缓存组件，他的作用将数据保存在 ConcurrentMap 中
 
 ##### **运行流程**： @Cacheable
