@@ -307,5 +307,34 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
 }
 ```
+#### 5、自定义javabean代替redis配置文件
+ 
+```java
+@Configuration
+public class RedisConfig {
+    /**
+     * 自定义 redis 连接
+     * @return
+     */
+    @Bean
+    public JedisConnectionFactory redisConnectionFactory() {
+        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration("127.0.0.1", 6379);
+        config.setDatabase(5);
+        config.setPassword("qwertyuiop@123");
+        JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
+        jedisPoolConfig.setMaxTotal(200);
+//        spring.redis.jedis.pool.max-active=200
+        jedisPoolConfig.setMaxIdle(50);
+//        spring.redis.jedis.pool.max-idle=50
+        jedisPoolConfig.setMaxWaitMillis(5000);
+//        spring.redis.jedis.pool.max-wait=5000ms
+        jedisPoolConfig.setMinIdle(5000);
+//        spring.redis.jedis.pool.min-idle=10
+        JedisConnectionFactory jedisConnectionFactory =  new JedisConnectionFactory(config);
+        jedisConnectionFactory.setPoolConfig(jedisPoolConfig);
+        return jedisConnectionFactory;
+    }
+}
+```
 
 

@@ -60,6 +60,12 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
             <version>2.0.6.RELEASE</version>
         </dependency>
+        <!-- 自定义javaBean 连接Redis-->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>2.9.0</version>
+        </dependency>
         <!-- redis session -->
         <dependency>
             <groupId>org.springframework.session</groupId>
