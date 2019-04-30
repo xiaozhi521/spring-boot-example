@@ -58,24 +58,24 @@ management:
 
 | 序号 | 端点名           | 描述                                                         |
 | :--: | :--------------- | ------------------------------------------------------------ |
-|  1   | **autoconfig**   | **所有自动配置信息**                                         |
+|  1   | **autoconfig**   | **获取自动配置信息**                                         |
 |  2   | **auditevents**  | **审计事件**                                                 |
 |  3   | **beans**        | **所有Bean的信息**                                           |
 |  4   | **configprops**  | **所有配置属性， 显示所有`@ConfigurationProperties`的整理列表 ** |
-|  5   | **dump**         | **线程状态信息**                                             |
-|  6   | **env**          | **当前环境信息**                                             |
+|  5   | **dump**         | **获取当前线程基本信息**                                     |
+|  6   | **env**          | **当前环境变量信息**                                         |
 |  7   | **health**       | **应用健康状况**                                             |
 |  8   | **info**         | **当前应用信息**                                             |
-|  9   | **metrics**      | **应用的各项指标**                                           |
+|  9   | **metrics**      | **获取应用的各项性能指标**                                   |
 |  10  | **threaddump **  | **执行线程转储 **                                            |
 |  11  | shutdown         | 允许应用程序正常关闭                                         |
 |  12  | sessions         | 允许从支持Spring Session的会话存储中检索和删除用户会话。使用Spring Session对响应式Web应用程序的支持时不可用 |
 |  13  | scheduledtasks   | 显示应用程序中的计划任务                                     |
-|  14  | mappings         | 显示所有`@RequestMapping`路径的整理列表                      |
+|  14  | **mappings**     | 显示所有`@RequestMapping`路径的整理列表                      |
 |  15  | liquibase        | 显示已应用的任何Liquibase数据库迁移                          |
 |  16  | loggers          | 显示和修改应用程序中记录器的配置                             |
 |  17  | integrationgraph | 显示Spring Integration图表                                   |
-|  18  | httptrace        | 显示HTTP跟踪信息（默认情况下，最后100个HTTP请求 - 响应交换   |
+|  18  | **trace**        | 显示HTTP跟踪信息（默认情况下，最后100个HTTP请求 - 响应交换   |
 |  19  | flyway           | 显示已应用的任何Flyway数据库迁移                             |
 |  20  | conditions       | 显示在配置和自动配置类上评估的条件以及它们匹配或不匹配的原因 |
 |  21  | caches           | 暴露可用的缓存                                               |
@@ -96,13 +96,16 @@ management:
 **定制端点一般通过endpoints+端点名+属性名来设置。**
 
 -  修改端点id（endpoints.beans.id=mybeans）
-- 开启远程应用关闭功能（endpoints.shutdown.enabled=true）
+-  开启远程应用关闭功能（endpoints.shutdown.enabled=true）
 -  关闭端点（endpoints.beans.enabled=false）
-- 开启所需端点
+   -   关闭 metrics 端点 ： `endpoints.metrics.enabled=false`
+-  关闭所有端点，开启 metrics 端点
   -  endpoints.enabled=false
-  -  endpoints.beans.enabled=true
+  -  endpoints.metrics.enabled=true
 -  定制端点访问根路径
   - management.context-path=/manage
+-  修改  metrics 端点的请求路径
+   -  endpoints.metrics.path=/endpoints/metrics
 -  关闭http端点
   -  management.port=-1
 
@@ -193,3 +196,49 @@ management.server.port=-1
 ```
 management.endpoints.web.exposure.exclude=*
 ```
+
+
+### 五、拓展
+
+#### 5.1、查看spring Boot 为我们提供了那些端点
+
+使用 springBoot 的 HATEOAS 插件，它是一个超媒体 （Hypermedia）技术，也是 REST 应用程序架构的一种约束。通过它可以汇总端点的信息，包括各个端点的名称与链接。
+
+###### 开启HATEOAS 插件，只需要添加以下 Maven 依赖 
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-hateoas</artifactId>
+</dependency>
+```
+
+###### 添加此依赖后，我们将拥有 actuator 端点，当我们在发送 /actuator 请求后，将看到所有的端点及访问链接
+
+http://localhost:8024/actuator 
+
+
+
+##### 5.2、图形化工具 
+
+###### 添加以下 Maven 依赖
+
+```xml
+<dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>hal-browser</artifactId>
+        </dependency>
+```
+
+http://localhost:8024/browser
+
+##### 5.3、开启 actuator 文档插件
+
+```xml
+<dependency>
+    <groupId>org.springframework.data</groupId>
+    <artifactId>spring-boot-actuator-docs</artifactId>
+</dependency>
+```
+
+​	http://localhost:8024/docs
