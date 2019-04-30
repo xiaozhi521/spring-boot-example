@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>spring-boot-mybatisplus</groupId>
-    <artifactId>example</artifactId>
+    <artifactId>spring-boot-mybatisplus</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>spring-boot-mybatisplus</name>
     <description>Demo project for Spring Boot</description>
@@ -98,12 +98,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-
-        <!-- hateoas 插件，查看springboot为我们提供了那些端点-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-hateoas</artifactId>
         </dependency>
 
         <!--监控图形化工具-->
