@@ -242,3 +242,20 @@ http://localhost:8024/browser
 ```
 
 ​	http://localhost:8024/docs
+
+##### 六、版本1.5.9 与 2.1.4 异同
+###### 6.1、 关于开启监控配置问题
+/mappings,/metrics 等默认是不开启的
+- [在1.5.9版本中需要加下面的配置才能访问，否则会 401错误](https://docs.spring.io/spring-boot/docs/1.5.9.RELEASE/reference/htmlsingle/#production-ready-monitoring)
+```yaml
+  management.security.enabled=false
+```
+
+- [在 2.1.4 版本中取消了上面的配置，变成了自定义路径](https://springcloud.cc/spring-boot.html#production-ready-monitoring)
+```yaml
+management.endpoints.web.base-path=/manage
+management.endpoints.web.path-mapping.health=myhealth
+```
+以 /health 为例
+加入 management.endpoints.web.base-path 这个配置在访问所有的监控都由原来的 /health 变为 /manage/health
+再加入 `management.endpoints.web.path-mapping.health=myhealth` 这个配置由原来的 /manage/health 变为 /manage/myhealth
