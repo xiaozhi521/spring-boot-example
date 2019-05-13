@@ -111,7 +111,7 @@ Docker 中国 镜像加速 ： https://www.docker-cn.com/registry-mirror
         spring.rabbitmq.username=guest
         spring.rabbitmq.password=guest
     ```
-4) RabbitTemplate 给RabbitMQ 发送和接收消息
+4) test.java.com.mqf.study.RabbitMQTest， RabbitTemplate 给RabbitMQ 发送和接收消息
 
      ```java
         @Autowired
